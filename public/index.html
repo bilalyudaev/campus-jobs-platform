@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Jobs Platform</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="card">
+      <h1 id="pageTitle">Campus Jobs Platform</h1>
+      <div class="row">
+        <label for="lang" id="languageLabel">Language:</label>
+        <select id="lang">
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+        <button id="logoutBtn">Logout</button>
+      </div>
+      <p id="currentUser">Not logged in</p>
+    </header>
+
+    <section class="grid">
+      <div class="card">
+        <h2 id="registerTitle">Register</h2>
+        <input id="registerName" placeholder="Name" />
+        <input id="registerEmail" placeholder="Email" />
+        <input id="registerPassword" type="password" placeholder="Password" />
+        <select id="registerRole">
+          <option value="STUDENT">STUDENT</option>
+          <option value="EMPLOYER">EMPLOYER</option>
+        </select>
+        <button id="registerBtn">Register</button>
+      </div>
+
+      <div class="card">
+        <h2 id="loginTitle">Login</h2>
+        <input id="loginEmail" placeholder="Email" />
+        <input id="loginPassword" type="password" placeholder="Password" />
+        <button id="loginBtn">Login</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 id="searchJobsTitle">Search Jobs</h2>
+      <div class="row wrap">
+        <input id="keyword" placeholder="Keyword" />
+        <input id="department" placeholder="Department" />
+        <input id="employmentType" placeholder="Employment type" />
+        <button id="searchJobsBtn">Search</button>
+        <button id="loadJobsBtn">Load all jobs</button>
+      </div>
+    </section>
+
+    <section id="createJobSection" class="card hidden">
+      <h2 id="createJobTitle">Create Job (Employer)</h2>
+      <input id="titleEn" placeholder="Title EN" />
+      <input id="titleEs" placeholder="Title ES" />
+      <textarea id="descriptionEn" placeholder="Description EN"></textarea>
+      <textarea id="descriptionEs" placeholder="Description ES"></textarea>
+      <input id="jobDepartment" placeholder="Department" />
+      <input id="jobEmploymentType" placeholder="Employment type" />
+      <input id="jobLocation" placeholder="Location" />
+      <input id="jobSalary" placeholder="Salary" />
+      <select id="jobStatus">
+        <option value="DRAFT">DRAFT</option>
+        <option value="ACTIVE">ACTIVE</option>
+        <option value="CLOSED">CLOSED</option>
+      </select>
+      <button id="createJobBtn">Create job</button>
+    </section>
+
+    <section class="card">
+      <h2 id="jobsTitle">Jobs</h2>
+      <div id="jobsList"></div>
+    </section>
+
+    <section id="studentApplicationsSection" class="card hidden">
+      <h2 id="studentApplicationsTitle">My Applications (Student)</h2>
+      <button id="loadMyApplicationsBtn">Load my applications</button>
+      <div id="studentApplications"></div>
+    </section>
+
+    <section id="employerApplicationsSection" class="card hidden">
+      <h2 id="employerApplicationsTitle">Applications to My Jobs (Employer)</h2>
+      <button id="loadEmployerApplicationsBtn">Load employer applications</button>
+      <div id="employerApplications"></div>
+    </section>
+
+    <section class="card">
+      <h2 id="messagesTitle">Messages</h2>
+      <div class="row wrap">
+        <input id="messageApplicationId" placeholder="Application ID" />
+        <button id="loadMessagesBtn">Load messages</button>
+      </div>
+      <div id="messagesList"></div>
+      <textarea id="messageText" placeholder="Type message"></textarea>
+      <button id="sendMessageBtn">Send message</button>
+    </section>
+
+    <section class="card">
+      <h2 id="responseTitle">Response</h2>
+      <pre id="output"></pre>
+    </section>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "job_created_successfully": "Vacante creada con éxito",
+  "job_not_found": "Vacante no encontrada",
+  "failed_to_create_job": "No se pudo crear la vacante",
+  "failed_to_fetch_jobs": "No se pudieron obtener las vacantes",
+  "failed_to_fetch_job": "No se pudo obtener la vacante",
+  "required_job_fields": "titleEn, titleEs, descriptionEn, descriptionEs y employmentType son obligatorios",
+
+  "application_submitted_successfully": "Solicitud enviada con éxito",
+  "application_not_found": "Solicitud no encontrada",
+  "failed_to_submit_application": "No se pudo enviar la solicitud",
+  "failed_to_fetch_applications": "No se pudieron obtener las solicitudes",
+  "failed_to_update_application_status": "No se pudo actualizar el estado de la solicitud",
+  "application_status_updated_successfully": "El estado de la solicitud se actualizó con éxito",
+  "job_not_open": "Esta vacante no está abierta para solicitudes",
+  "already_applied": "Ya has solicitado esta vacante",
+  "invalid_status": "Estado no válido",
+
+  "message_sent_successfully": "Mensaje enviado con éxito",
+  "message_text_required": "messageText es obligatorio",
+  "failed_to_send_message": "No se pudo enviar el mensaje",
+  "failed_to_fetch_messages": "No se pudieron obtener los mensajes",
+
+  "unauthorized": "No autorizado",
+  "forbidden": "Prohibido"
+}

@@ -1,0 +1,28 @@
+{
+  "job_created_successfully": "Job created successfully",
+  "job_not_found": "Job not found",
+  "failed_to_create_job": "Failed to create job",
+  "failed_to_fetch_jobs": "Failed to fetch jobs",
+  "failed_to_fetch_job": "Failed to fetch job",
+  "required_job_fields": "titleEn, titleEs, descriptionEn, descriptionEs and employmentType are required",
+
+  "application_submitted_successfully": "Application submitted successfully",
+  "application_not_found": "Application not found",
+  "failed_to_submit_application": "Failed to submit application",
+  "failed_to_fetch_applications": "Failed to fetch applications",
+  "failed_to_update_application_status": "Failed to update application status",
+  "application_status_updated_successfully": "Application status updated successfully",
+  "job_not_open": "This job is not open for applications",
+  "already_applied": "You have already applied for this job",
+  "invalid_status": "Invalid status",
+
+  "message_sent_successfully": "Message sent successfully",
+  "message_text_required": "messageText is required",
+  "failed_to_send_message": "Failed to send message",
+  "failed_to_fetch_messages": "Failed to fetch messages",
+
+  "unauthorized": "Unauthorized",
+  "forbidden": "Forbidden"
+}
+
+

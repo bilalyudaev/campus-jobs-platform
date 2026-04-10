@@ -59,7 +59,8 @@
       <input id="titleEs" placeholder="Title ES" />
       <textarea id="descriptionEn" placeholder="Description EN"></textarea>
       <textarea id="descriptionEs" placeholder="Description ES"></textarea>
-      <input id="jobDepartment" placeholder="Department" />
+      <select id="jobCategory"></select>
+	<select id="jobDepartment"</select>
       <input id="jobEmploymentType" placeholder="Employment type" />
       <input id="jobLocation" placeholder="Location" />
       <input id="jobSalary" placeholder="Salary" />
@@ -69,6 +70,17 @@
         <option value="CLOSED">CLOSED</option>
       </select>
       <button id="createJobBtn">Create job</button>
+<hr />
+<h3 id="requirementSectionTitle">Add Requirement to Job</h3>
+<input id="requirementJobId" placeholder="Job ID" />
+<select id="requirementSkill"></select>
+<textarea id="requirementDescriptionEn" placeholder="Requirement description EN"></textarea>
+<textarea id="requirementDescriptionEs" placeholder="Requirement description ES"></textarea>
+<select id="requirementIsRequired">
+  <option value="true">Required</option>
+  <option value="false">Optional</option>
+</select>
+<button id="createRequirementBtn">Add requirement</button>
     </section>
 
     <section class="card">
@@ -98,6 +110,12 @@
       <textarea id="messageText" placeholder="Type message"></textarea>
       <button id="sendMessageBtn">Send message</button>
     </section>
+
+<section class="card">
+  <h2 id="notificationsTitle">Notifications</h2>
+  <button id="loadNotificationsBtn">Load notifications</button>
+  <div id="notificationsList"></div>
+</section>
 
     <section class="card">
       <h2 id="responseTitle">Response</h2>

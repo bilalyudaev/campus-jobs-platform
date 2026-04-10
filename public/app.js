@@ -36,6 +36,13 @@ const translations = {
     loadMessagesBtn: 'Load messages',
     sendMessageBtn: 'Send message',
 
+notificationsTitle: 'Notifications',
+loadNotificationsBtn: 'Load notifications',
+markAsReadBtn: 'Mark as read',
+
+
+
+
     responseTitle: 'Response',
 
     registerNamePlaceholder: 'Name',
@@ -72,6 +79,7 @@ const translations = {
     applyBtn: 'Apply',
     updateStatusBtn: 'Update status',
     openMessagesBtn: 'Open messages',
+
 
     resumePrompt: 'Resume text',
     coverLetterPrompt: 'Cover letter',
@@ -110,6 +118,11 @@ const translations = {
     loadMessagesBtn: 'Cargar mensajes',
     sendMessageBtn: 'Enviar mensaje',
 
+notificationsTitle: 'Notificaciones',
+loadNotificationsBtn: 'Cargar notificaciones',
+markAsReadBtn: 'Marcar como leído',
+
+
     responseTitle: 'Respuesta',
 
     registerNamePlaceholder: 'Nombre',
@@ -147,6 +160,7 @@ const translations = {
     updateStatusBtn: 'Actualizar estado',
     openMessagesBtn: 'Abrir mensajes',
 
+
     resumePrompt: 'Texto del currículum',
     coverLetterPrompt: 'Carta de presentación',
     senderFallback: 'Usuario',
@@ -154,17 +168,22 @@ const translations = {
   }
 };
 
-const output = document.getElementById('output');
-const langSelect = document.getElementById('lang');
-const currentUser = document.getElementById('currentUser');
+const byId = (id) => document.getElementById(id);
 
-langSelect.value = state.lang;
+const output = byId('output');
+const langSelect = byId('lang');
+const currentUser = byId('currentUser');
+
+if (langSelect) {
+  langSelect.value = state.lang;
+}
 
 function tr(key) {
   return translations[state.lang]?.[key] || translations.en[key] || key;
 }
 
 function setOutput(data) {
+  if (!output) return;
   output.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
 }
 
@@ -186,75 +205,84 @@ function logout() {
 }
 
 function renderUser() {
+  const createJobSection = byId('createJobSection');
+  const studentApplicationsSection = byId('studentApplicationsSection');
+  const employerApplicationsSection = byId('employerApplicationsSection');
+
+  if (!currentUser) return;
+
   if (!state.user) {
     currentUser.textContent = tr('notLoggedIn');
-    document.getElementById('createJobSection').classList.add('hidden');
-    document.getElementById('studentApplicationsSection').classList.add('hidden');
-    document.getElementById('employerApplicationsSection').classList.add('hidden');
+    if (createJobSection) createJobSection.classList.add('hidden');
+    if (studentApplicationsSection) studentApplicationsSection.classList.add('hidden');
+    if (employerApplicationsSection) employerApplicationsSection.classList.add('hidden');
     return;
   }
 
   currentUser.textContent = `${tr('loggedInAs')} ${state.user.name} (${state.user.role})`;
 
-  document.getElementById('createJobSection').classList.toggle('hidden', state.user.role !== 'EMPLOYER');
-  document.getElementById('studentApplicationsSection').classList.toggle('hidden', state.user.role !== 'STUDENT');
-  document.getElementById('employerApplicationsSection').classList.toggle('hidden', state.user.role !== 'EMPLOYER');
+  if (createJobSection) createJobSection.classList.toggle('hidden', state.user.role !== 'EMPLOYER');
+  if (studentApplicationsSection) studentApplicationsSection.classList.toggle('hidden', state.user.role !== 'STUDENT');
+  if (employerApplicationsSection) employerApplicationsSection.classList.toggle('hidden', state.user.role !== 'EMPLOYER');
 }
 
 function applyTranslations() {
-  document.getElementById('pageTitle').textContent = tr('pageTitle');
-  document.getElementById('languageLabel').textContent = tr('languageLabel');
-  document.getElementById('logoutBtn').textContent = tr('logoutBtn');
+  const textMap = {
+    pageTitle: 'pageTitle',
+    languageLabel: 'languageLabel',
+    logoutBtn: 'logoutBtn',
+    registerTitle: 'registerTitle',
+    registerBtn: 'registerBtn',
+    loginTitle: 'loginTitle',
+    loginBtn: 'loginBtn',
+    searchJobsTitle: 'searchJobsTitle',
+    searchJobsBtn: 'searchJobsBtn',
+    loadJobsBtn: 'loadJobsBtn',
+    createJobTitle: 'createJobTitle',
+    createJobBtn: 'createJobBtn',
+    jobsTitle: 'jobsTitle',
+    studentApplicationsTitle: 'studentApplicationsTitle',
+    loadMyApplicationsBtn: 'loadMyApplicationsBtn',
+    employerApplicationsTitle: 'employerApplicationsTitle',
+    loadEmployerApplicationsBtn: 'loadEmployerApplicationsBtn',
+    messagesTitle: 'messagesTitle',
+    loadMessagesBtn: 'loadMessagesBtn',
+    sendMessageBtn: 'sendMessageBtn',
+    responseTitle: 'responseTitle',
+notificationsTitle: 'notificationsTitle',
+loadNotificationsBtn: 'loadNotificationsBtn'
+  };
 
-  document.getElementById('registerTitle').textContent = tr('registerTitle');
-  document.getElementById('registerBtn').textContent = tr('registerBtn');
+  Object.entries(textMap).forEach(([id, key]) => {
+    const el = byId(id);
+    if (el) el.textContent = tr(key);
+  });
 
-  document.getElementById('loginTitle').textContent = tr('loginTitle');
-  document.getElementById('loginBtn').textContent = tr('loginBtn');
+  const placeholderMap = {
+    registerName: 'registerNamePlaceholder',
+    registerEmail: 'registerEmailPlaceholder',
+    registerPassword: 'registerPasswordPlaceholder',
+    loginEmail: 'loginEmailPlaceholder',
+    loginPassword: 'loginPasswordPlaceholder',
+    keyword: 'keywordPlaceholder',
+    department: 'departmentPlaceholder',
+    employmentType: 'employmentTypePlaceholder',
+    titleEn: 'titleEnPlaceholder',
+    titleEs: 'titleEsPlaceholder',
+    descriptionEn: 'descriptionEnPlaceholder',
+    descriptionEs: 'descriptionEsPlaceholder',
+    jobDepartment: 'jobDepartmentPlaceholder',
+    jobEmploymentType: 'jobEmploymentTypePlaceholder',
+    jobLocation: 'jobLocationPlaceholder',
+    jobSalary: 'jobSalaryPlaceholder',
+    messageApplicationId: 'messageApplicationIdPlaceholder',
+    messageText: 'messageTextPlaceholder'
+  };
 
-  document.getElementById('searchJobsTitle').textContent = tr('searchJobsTitle');
-  document.getElementById('searchJobsBtn').textContent = tr('searchJobsBtn');
-  document.getElementById('loadJobsBtn').textContent = tr('loadJobsBtn');
-
-  document.getElementById('createJobTitle').textContent = tr('createJobTitle');
-  document.getElementById('createJobBtn').textContent = tr('createJobBtn');
-
-  document.getElementById('jobsTitle').textContent = tr('jobsTitle');
-
-  document.getElementById('studentApplicationsTitle').textContent = tr('studentApplicationsTitle');
-  document.getElementById('loadMyApplicationsBtn').textContent = tr('loadMyApplicationsBtn');
-
-  document.getElementById('employerApplicationsTitle').textContent = tr('employerApplicationsTitle');
-  document.getElementById('loadEmployerApplicationsBtn').textContent = tr('loadEmployerApplicationsBtn');
-
-  document.getElementById('messagesTitle').textContent = tr('messagesTitle');
-  document.getElementById('loadMessagesBtn').textContent = tr('loadMessagesBtn');
-  document.getElementById('sendMessageBtn').textContent = tr('sendMessageBtn');
-
-  document.getElementById('responseTitle').textContent = tr('responseTitle');
-
-  document.getElementById('registerName').placeholder = tr('registerNamePlaceholder');
-  document.getElementById('registerEmail').placeholder = tr('registerEmailPlaceholder');
-  document.getElementById('registerPassword').placeholder = tr('registerPasswordPlaceholder');
-
-  document.getElementById('loginEmail').placeholder = tr('loginEmailPlaceholder');
-  document.getElementById('loginPassword').placeholder = tr('loginPasswordPlaceholder');
-
-  document.getElementById('keyword').placeholder = tr('keywordPlaceholder');
-  document.getElementById('department').placeholder = tr('departmentPlaceholder');
-  document.getElementById('employmentType').placeholder = tr('employmentTypePlaceholder');
-
-  document.getElementById('titleEn').placeholder = tr('titleEnPlaceholder');
-  document.getElementById('titleEs').placeholder = tr('titleEsPlaceholder');
-  document.getElementById('descriptionEn').placeholder = tr('descriptionEnPlaceholder');
-  document.getElementById('descriptionEs').placeholder = tr('descriptionEsPlaceholder');
-  document.getElementById('jobDepartment').placeholder = tr('jobDepartmentPlaceholder');
-  document.getElementById('jobEmploymentType').placeholder = tr('jobEmploymentTypePlaceholder');
-  document.getElementById('jobLocation').placeholder = tr('jobLocationPlaceholder');
-  document.getElementById('jobSalary').placeholder = tr('jobSalaryPlaceholder');
-
-  document.getElementById('messageApplicationId').placeholder = tr('messageApplicationIdPlaceholder');
-  document.getElementById('messageText').placeholder = tr('messageTextPlaceholder');
+  Object.entries(placeholderMap).forEach(([id, key]) => {
+    const el = byId(id);
+    if (el) el.placeholder = tr(key);
+  });
 
   renderUser();
 }
@@ -262,17 +290,24 @@ function applyTranslations() {
 function apiUrl(path, params = {}) {
   const url = new URL(path, window.location.origin);
   url.searchParams.set('lang', state.lang);
+
   Object.entries(params).forEach(([key, value]) => {
     if (value) url.searchParams.set(key, value);
   });
+
   return url.toString();
 }
 
 async function request(path, options = {}, params = {}) {
   const headers = {
-    'Content-Type': 'application/json',
     ...(options.headers || {})
   };
+
+  const isFormData = options.body instanceof FormData;
+
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   if (state.token) {
     headers.Authorization = `Bearer ${state.token}`;
@@ -297,10 +332,10 @@ async function register() {
     const data = await request('/api/auth/register', {
       method: 'POST',
       body: JSON.stringify({
-        name: document.getElementById('registerName').value,
-        email: document.getElementById('registerEmail').value,
-        password: document.getElementById('registerPassword').value,
-        role: document.getElementById('registerRole').value
+        name: byId('registerName')?.value || '',
+        email: byId('registerEmail')?.value || '',
+        password: byId('registerPassword')?.value || '',
+        role: byId('registerRole')?.value || 'STUDENT'
       })
     });
 
@@ -316,8 +351,8 @@ async function login() {
     const data = await request('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({
-        email: document.getElementById('loginEmail').value,
-        password: document.getElementById('loginPassword').value
+        email: byId('loginEmail')?.value || '',
+        password: byId('loginPassword')?.value || ''
       })
     });
 
@@ -331,9 +366,9 @@ async function login() {
 async function loadJobs() {
   try {
     const params = {
-      keyword: document.getElementById('keyword').value,
-      department: document.getElementById('department').value,
-      employmentType: document.getElementById('employmentType').value
+      keyword: byId('keyword')?.value || '',
+      department: byId('department')?.value || '',
+      employmentType: byId('employmentType')?.value || ''
     };
 
     const jobs = await request('/api/jobs', { method: 'GET' }, params);
@@ -345,10 +380,12 @@ async function loadJobs() {
 }
 
 function renderJobs(jobs) {
-  const container = document.getElementById('jobsList');
+  const container = byId('jobsList');
+  if (!container) return;
+
   container.innerHTML = '';
 
-  jobs.forEach(job => {
+  jobs.forEach((job) => {
     const div = document.createElement('div');
     div.className = 'job-card';
     div.innerHTML = `
@@ -359,47 +396,75 @@ function renderJobs(jobs) {
       <p><strong>${tr('locationLabel')}:</strong> ${job.location || '-'}</p>
       <p><strong>${tr('salaryLabel')}:</strong> ${job.salary || '-'}</p>
       <p><strong>${tr('statusLabel')}:</strong> ${job.status}</p>
+${
+  job.requirements && job.requirements.length
+    ? `<div><strong>Requirements:</strong><ul>${job.requirements
+        .map((req) => `<li>${req.description}${req.skill ? ` (${req.skill})` : ''}</li>`)
+        .join('')}</ul></div>`
+    : ''
+}
     `;
 
     if (state.user?.role === 'STUDENT') {
-      const btn = document.createElement('button');
-      btn.textContent = tr('applyBtn');
-      btn.onclick = async () => {
-        const resumeText = prompt(tr('resumePrompt'));
-        const coverLetter = prompt(tr('coverLetterPrompt'));
+      const form = document.createElement('form');
+      form.className = 'app-card';
+      form.enctype = 'multipart/form-data';
+
+      form.innerHTML = `
+        <textarea name="resumeText" placeholder="${tr('resumePrompt')}"></textarea>
+        <textarea name="coverLetter" placeholder="${tr('coverLetterPrompt')}"></textarea>
+        <input name="resumeFile" type="file" accept=".pdf,.doc,.docx" />
+        <button type="submit">${tr('applyBtn')}</button>
+      `;
+
+      form.onsubmit = async (e) => {
+        e.preventDefault();
+
+        const fileInput = form.querySelector('input[name="resumeFile"]');
+        const file = fileInput?.files?.[0];
+
+        console.log('Selected file:', file);
+
+        if (!file) {
+          setOutput('Resume file is required');
+          return;
+        }
+
+        const formData = new FormData(form);
 
         try {
           const data = await request(`/api/jobs/${job.id}/apply`, {
             method: 'POST',
-            body: JSON.stringify({ resumeText, coverLetter })
+            body: formData
           });
           setOutput(data);
         } catch (error) {
           setOutput(error.message);
         }
       };
-      div.appendChild(btn);
+
+      div.appendChild(form);
     }
 
     container.appendChild(div);
   });
 }
-
 async function createJob() {
   try {
     const data = await request('/api/jobs', {
       method: 'POST',
-      body: JSON.stringify({
-        titleEn: document.getElementById('titleEn').value,
-        titleEs: document.getElementById('titleEs').value,
-        descriptionEn: document.getElementById('descriptionEn').value,
-        descriptionEs: document.getElementById('descriptionEs').value,
-        department: document.getElementById('jobDepartment').value,
-        employmentType: document.getElementById('jobEmploymentType').value,
-        location: document.getElementById('jobLocation').value,
-        salary: document.getElementById('jobSalary').value,
-        status: document.getElementById('jobStatus').value
-      })
+	body: JSON.stringify({
+  titleEn: byId('titleEn')?.value || '',
+  titleEs: byId('titleEs')?.value || '',
+  descriptionEn: byId('descriptionEn')?.value || '',
+  descriptionEs: byId('descriptionEs')?.value || '',
+  employmentType: byId('jobEmploymentType')?.value || '',
+  location: byId('jobLocation')?.value || '',
+  salary: byId('jobSalary')?.value || '',
+  status: byId('jobStatus')?.value || 'DRAFT',
+  categoryId: byId('jobCategory')?.value || '',
+  departmentId: byId('jobDepartment')?.value || ''
+})
     });
 
     setOutput(data);
@@ -412,10 +477,12 @@ async function createJob() {
 async function loadMyApplications() {
   try {
     const applications = await request('/api/applications/my');
-    const container = document.getElementById('studentApplications');
+    const container = byId('studentApplications');
+    if (!container) return;
+
     container.innerHTML = '';
 
-    applications.forEach(app => {
+    applications.forEach((app) => {
       const div = document.createElement('div');
       div.className = 'app-card';
       div.innerHTML = `
@@ -437,34 +504,40 @@ async function loadMyApplications() {
 async function loadEmployerApplications() {
   try {
     const applications = await request('/api/employer/applications');
-    const container = document.getElementById('employerApplications');
+    const container = byId('employerApplications');
+    if (!container) return;
+
     container.innerHTML = '';
 
-    applications.forEach(app => {
+    applications.forEach((app) => {
       const div = document.createElement('div');
       div.className = 'app-card';
-
-      div.innerHTML = `
-        <h3>${app.job.title}</h3>
-        <p><strong>${tr('studentLabel')}:</strong> ${app.student.name} (${app.student.email})</p>
-        <p><strong>${tr('statusLabel')}:</strong> ${app.status}</p>
-        <p><strong>${tr('resumeLabel')}:</strong> ${app.resumeText || '-'}</p>
-        <p><strong>${tr('coverLetterLabel')}:</strong> ${app.coverLetter || '-'}</p>
-        <div class="small-row">
-          <select id="status-${app.id}">
-            <option value="SUBMITTED">SUBMITTED</option>
-            <option value="REVIEWING">REVIEWING</option>
-            <option value="ACCEPTED">ACCEPTED</option>
-            <option value="REJECTED">REJECTED</option>
-          </select>
-          <button onclick="updateApplicationStatus(${app.id})">${tr('updateStatusBtn')}</button>
-          <button onclick="openMessages(${app.id})">${tr('openMessagesBtn')}</button>
-        </div>
-      `;
-
+div.innerHTML = `
+  <h3>${app.job.title}</h3>
+  <p><strong>${tr('studentLabel')}:</strong> ${app.student.name} (${app.student.email})</p>
+  <p><strong>${tr('statusLabel')}:</strong> ${app.status}</p>
+  <p><strong>${tr('resumeLabel')}:</strong> ${app.resumeText || '-'}</p>
+  <p><strong>${tr('coverLetterLabel')}:</strong> ${app.coverLetter || '-'}</p>
+  <p><strong>Resume file:</strong> ${
+    app.resume
+      ? `<a href="${app.resume.fileUrl}" target="_blank">${app.resume.fileName}</a>`
+      : '-'
+  }</p>
+  <div class="small-row">
+    <select id="status-${app.id}">
+      <option value="SUBMITTED">SUBMITTED</option>
+      <option value="REVIEWING">REVIEWING</option>
+      <option value="ACCEPTED">ACCEPTED</option>
+      <option value="REJECTED">REJECTED</option>
+    </select>
+    <button onclick="updateApplicationStatus(${app.id})">${tr('updateStatusBtn')}</button>
+    <button onclick="openMessages(${app.id})">${tr('openMessagesBtn')}</button>
+  </div>
+`;
       container.appendChild(div);
+
       setTimeout(() => {
-        const select = document.getElementById(`status-${app.id}`);
+        const select = byId(`status-${app.id}`);
         if (select) select.value = app.status;
       }, 0);
     });
@@ -477,7 +550,7 @@ async function loadEmployerApplications() {
 
 async function updateApplicationStatus(applicationId) {
   try {
-    const status = document.getElementById(`status-${applicationId}`).value;
+    const status = byId(`status-${applicationId}`)?.value || 'SUBMITTED';
     const data = await request(`/api/applications/${applicationId}/status`, {
       method: 'PATCH',
       body: JSON.stringify({ status })
@@ -490,18 +563,21 @@ async function updateApplicationStatus(applicationId) {
 }
 
 function openMessages(applicationId) {
-  document.getElementById('messageApplicationId').value = applicationId;
+  const input = byId('messageApplicationId');
+  if (input) input.value = applicationId;
   loadMessages();
 }
 
 async function loadMessages() {
   try {
-    const applicationId = document.getElementById('messageApplicationId').value;
+    const applicationId = byId('messageApplicationId')?.value || '';
     const messages = await request(`/api/applications/${applicationId}/messages`);
-    const container = document.getElementById('messagesList');
+    const container = byId('messagesList');
+    if (!container) return;
+
     container.innerHTML = '';
 
-    messages.forEach(message => {
+    messages.forEach((message) => {
       const div = document.createElement('div');
       div.className = 'message-card';
       div.innerHTML = `
@@ -520,51 +596,191 @@ async function loadMessages() {
 
 async function sendMessage() {
   try {
-    const applicationId = document.getElementById('messageApplicationId').value;
-    const messageText = document.getElementById('messageText').value;
+    const applicationId = byId('messageApplicationId')?.value || '';
+    const messageText = byId('messageText')?.value || '';
 
     const data = await request(`/api/applications/${applicationId}/messages`, {
       method: 'POST',
       body: JSON.stringify({ messageText })
     });
 
-    document.getElementById('messageText').value = '';
+    if (byId('messageText')) byId('messageText').value = '';
     setOutput(data);
     loadMessages();
   } catch (error) {
     setOutput(error.message);
   }
 }
+async function loadCategories() {
+  try {
+    const categories = await request('/api/categories');
+    const select = byId('jobCategory');
+    if (!select) return;
 
-document.getElementById('registerBtn').onclick = register;
-document.getElementById('loginBtn').onclick = login;
-document.getElementById('logoutBtn').onclick = logout;
-document.getElementById('searchJobsBtn').onclick = loadJobs;
-document.getElementById('loadJobsBtn').onclick = loadJobs;
-document.getElementById('createJobBtn').onclick = createJob;
-document.getElementById('loadMyApplicationsBtn').onclick = loadMyApplications;
-document.getElementById('loadEmployerApplicationsBtn').onclick = loadEmployerApplications;
-document.getElementById('loadMessagesBtn').onclick = loadMessages;
-document.getElementById('sendMessageBtn').onclick = sendMessage;
-
-langSelect.onchange = () => {
-  state.lang = langSelect.value;
-  localStorage.setItem('lang', state.lang);
-  applyTranslations();
-  loadJobs();
-
-  if (state.user?.role === 'STUDENT') {
-    loadMyApplications();
+    select.innerHTML = `<option value="">Select category</option>`;
+    categories.forEach((item) => {
+      const option = document.createElement('option');
+      option.value = item.id;
+      option.textContent = item.name;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    setOutput(error.message);
   }
+}
 
-  if (state.user?.role === 'EMPLOYER') {
-    loadEmployerApplications();
+async function loadDepartments() {
+  try {
+    const departments = await request('/api/departments');
+    const select = byId('jobDepartment');
+    if (!select) return;
+
+    select.innerHTML = `<option value="">Select department</option>`;
+    departments.forEach((item) => {
+      const option = document.createElement('option');
+      option.value = item.id;
+      option.textContent = item.name;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    setOutput(error.message);
   }
-};
+}
+
+async function loadSkills() {
+  try {
+    const skills = await request('/api/skills');
+
+    const select = byId('requirementSkill');
+    if (select) {
+      select.innerHTML = `<option value="">Select skill</option>`;
+      skills.forEach((item) => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item.name;
+        select.appendChild(option);
+      });
+    }
+
+    return skills;
+  } catch (error) {
+    setOutput(error.message);
+    return [];
+  }
+}
+
+async function createRequirement() {
+  try {
+    const jobId = byId('requirementJobId')?.value || '';
+
+    if (!jobId) {
+      setOutput('Job ID is required');
+      return;
+    }
+
+    const data = await request(`/api/jobs/${jobId}/requirements`, {
+      method: 'POST',
+      body: JSON.stringify({
+        skillId: byId('requirementSkill')?.value || '',
+        descriptionEn: byId('requirementDescriptionEn')?.value || '',
+        descriptionEs: byId('requirementDescriptionEs')?.value || '',
+        isRequired: (byId('requirementIsRequired')?.value || 'true') === 'true'
+      })
+    });
+
+    setOutput(data);
+    loadJobs();
+  } catch (error) {
+    setOutput(error.message);
+  }
+}
+
+
+async function loadNotifications() {
+  try {
+    const notifications = await request('/api/notifications/my');
+    const container = byId('notificationsList');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    notifications.forEach((item) => {
+      const div = document.createElement('div');
+      div.className = 'message-card';
+      div.innerHTML = `
+        <p><strong>${item.title}</strong></p>
+        <p>${item.message}</p>
+        <p><strong>Read:</strong> ${item.isRead ? 'Yes' : 'No'}</p>
+        <small>${new Date(item.createdAt).toLocaleString()}</small>
+        ${
+          !item.isRead
+            ? `<div class="small-row"><button onclick="markNotificationAsRead(${item.id})">${tr('markAsReadBtn')}</button></div>`
+            : ''
+        }
+      `;
+      container.appendChild(div);
+    });
+
+    setOutput(notifications);
+  } catch (error) {
+    setOutput(error.message);
+  }
+}
+
+async function markNotificationAsRead(notificationId) {
+  try {
+    const data = await request(`/api/notifications/${notificationId}/read`, {
+      method: 'PATCH',
+      body: JSON.stringify({})
+    });
+    setOutput(data);
+    loadNotifications();
+  } catch (error) {
+    setOutput(error.message);
+  }
+}
+
+function bindClick(id, handler) {
+  const el = byId(id);
+  if (el) el.onclick = handler;
+}
+
+bindClick('registerBtn', register);
+bindClick('loginBtn', login);
+bindClick('logoutBtn', logout);
+bindClick('searchJobsBtn', loadJobs);
+bindClick('loadJobsBtn', loadJobs);
+bindClick('createJobBtn', createJob);
+bindClick('loadMyApplicationsBtn', loadMyApplications);
+bindClick('loadEmployerApplicationsBtn', loadEmployerApplications);
+bindClick('loadMessagesBtn', loadMessages);
+bindClick('sendMessageBtn', sendMessage);
+bindClick('createRequirement', createRequirement);
+bindClick('loadNotificationsBtn', loadNotifications);
+
+if (langSelect) {
+  langSelect.onchange = () => {
+    state.lang = langSelect.value;
+    localStorage.setItem('lang', state.lang);
+    applyTranslations();
+    loadJobs();
+
+    if (state.user?.role === 'STUDENT') {
+      loadMyApplications();
+    }
+
+    if (state.user?.role === 'EMPLOYER') {
+      loadEmployerApplications();
+    }
+  };
+}
 
 renderUser();
 applyTranslations();
+loadCategories();
+loadDepartments();
 loadJobs();
 
 window.openMessages = openMessages;
 window.updateApplicationStatus = updateApplicationStatus;
+window.markNotificationAsRead = markNotificationAsRead;

@@ -1,5 +1,6 @@
 const prisma = require('../utils/prisma');
 const t = require('../utils/i18n');
+const { createNotification } = require('../utils/notification.service');
 
 exports.sendMessage = async (req, res) => {
   try {
@@ -36,7 +37,13 @@ exports.sendMessage = async (req, res) => {
         messageText
       }
     });
-
+await createNotification({
+  userId: receiverId,
+  titleEn: 'New message',
+  titleEs: 'Nuevo mensaje',
+  messageEn: 'You received a new message regarding an application.',
+  messageEs: 'Has recibido un nuevo mensaje sobre una solicitud.'
+});
     res.status(201).json({
       message: t(req.lang, 'message_sent_successfully'),
       data: message

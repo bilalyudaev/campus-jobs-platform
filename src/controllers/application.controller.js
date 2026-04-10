@@ -1,12 +1,14 @@
+const path = require('path');
 const prisma = require('../utils/prisma');
 const t = require('../utils/i18n');
+const { createNotification } = require('../utils/notification.service');
 
 function localizeJob(job, lang) {
   return {
     id: job.id,
     title: lang === 'es' ? job.titleEs : job.titleEn,
     description: lang === 'es' ? job.descriptionEs : job.descriptionEn,
-    department: job.department,
+    department: job.department?.nameEn || job.department?.nameEs || null,
     employmentType: job.employmentType,
     location: job.location,
     salary: job.salary,
@@ -14,10 +16,23 @@ function localizeJob(job, lang) {
   };
 }
 
+function formatResume(resume) {
+  if (!resume) return null;
+
+  return {
+    id: resume.id,
+    fileName: resume.fileName,
+    filePath: resume.filePath,
+    fileUrl: `/uploads/resumes/${path.basename(resume.filePath)}`,
+    uploadedAt: resume.uploadedAt
+  };
+}
+
 exports.applyToJob = async (req, res) => {
   try {
     const jobId = Number(req.params.id);
-    const { resumeText, coverLetter } = req.body;
+    const resumeText = req.body?.resumeText || '';
+    const coverLetter = req.body?.coverLetter || '';
 
     const job = await prisma.job.findUnique({
       where: { id: jobId }
@@ -42,24 +57,51 @@ exports.applyToJob = async (req, res) => {
       return res.status(400).json({ message: t(req.lang, 'already_applied') });
     }
 
+    if (!req.file) {
+      return res.status(400).json({ message: 'Resume file is required' });
+    }
+
+    const resume = await prisma.resume.create({
+      data: {
+        studentId: req.user.userId,
+        fileName: req.file.originalname,
+        filePath: req.file.path
+      }
+    });
+
     const application = await prisma.application.create({
       data: {
         jobId,
         studentId: req.user.userId,
+        resumeId: resume.id,
         resumeText,
         coverLetter
+      },
+      include: {
+        resume: true
       }
     });
+await createNotification({
+  userId: job.employerId,
+  titleEn: 'New application',
+  titleEs: 'Nueva solicitud',
+  messageEn: `A student applied for your job "${job.titleEn}".`,
+  messageEs: `Un estudiante solicitó tu vacante "${job.titleEs}".`
+});
 
     res.status(201).json({
       message: t(req.lang, 'application_submitted_successfully'),
-      application
+      application: {
+        ...application,
+        resume: formatResume(application.resume)
+      }
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: t(req.lang, 'failed_to_submit_application') });
   }
 };
+
 
 exports.getMyApplications = async (req, res) => {
   try {
@@ -68,7 +110,12 @@ exports.getMyApplications = async (req, res) => {
         studentId: req.user.userId
       },
       include: {
-        job: true
+        job: {
+          include: {
+            department: true
+          }
+        },
+        resume: true
       },
       orderBy: {
         createdAt: 'desc'
@@ -82,6 +129,7 @@ exports.getMyApplications = async (req, res) => {
       coverLetter: application.coverLetter,
       createdAt: application.createdAt,
       updatedAt: application.updatedAt,
+      resume: formatResume(application.resume),
       job: localizeJob(application.job, req.lang)
     }));
 
@@ -120,7 +168,12 @@ exports.getJobApplications = async (req, res) => {
             email: true
           }
         },
-        job: true
+        job: {
+          include: {
+            department: true
+          }
+        },
+        resume: true
       },
       orderBy: {
         createdAt: 'desc'
@@ -135,6 +188,7 @@ exports.getJobApplications = async (req, res) => {
       createdAt: application.createdAt,
       updatedAt: application.updatedAt,
       student: application.student,
+      resume: formatResume(application.resume),
       job: localizeJob(application.job, req.lang)
     }));
 
@@ -154,21 +208,24 @@ exports.getEmployerApplications = async (req, res) => {
         }
       },
       include: {
-        job: true,
+        job: {
+          include: {
+            department: true
+          }
+        },
         student: {
           select: {
             id: true,
             name: true,
             email: true
           }
-        }
+        },
+        resume: true
       },
       orderBy: {
         createdAt: 'desc'
       }
-
-
-});
+    });
 
     const result = applications.map((application) => ({
       id: application.id,
@@ -178,6 +235,7 @@ exports.getEmployerApplications = async (req, res) => {
       createdAt: application.createdAt,
       updatedAt: application.updatedAt,
       student: application.student,
+      resume: formatResume(application.resume),
       job: localizeJob(application.job, req.lang)
     }));
 
@@ -218,6 +276,13 @@ exports.updateApplicationStatus = async (req, res) => {
       where: { id: applicationId },
       data: { status }
     });
+        await createNotification({
+  userId: application.studentId,
+  titleEn: 'Application status updated',
+  titleEs: 'Estado de la solicitud actualizado',
+  messageEn: `Your application status was changed to ${status}.`,
+  messageEs: `El estado de tu solicitud fue cambiado a ${status}.`
+});
 
     res.json({
       message: t(req.lang, 'application_status_updated_successfully'),
@@ -228,3 +293,4 @@ exports.updateApplicationStatus = async (req, res) => {
     res.status(500).json({ message: 'Failed to update application status' });
   }
 };
+
